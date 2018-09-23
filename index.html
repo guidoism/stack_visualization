@@ -39,7 +39,9 @@
 	     $('#data').append(a)
 	     $('#data').append(b)
 	 }],
-	 ['DUP', () => {}],
+	 ['DUP', () => {
+	     $('#data').append($('#data tr:last').clone())
+	 }],
 	 ['OVER', () => {}],
 	 ['ROT', () => {}],
 	 ['NROT', () => {}],
