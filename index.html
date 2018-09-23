@@ -30,17 +30,6 @@
      [...Array(9).keys()].map(s => $('#data').append(`<tr><td>${s}</td></tr>`))
 
      let words = [
-	 'DROP',
-	 'SWAP',
-	 'DUP',
-	 'OVER',
-	 'ROT',
-	 'NROT',
-     ]
-
-     $('#words').append(words.map(w => `<tr><td class="hidden"><button>${w}</button></td></tr>`));
-
-     words = [
 	 ['DROP', () => {
 	     $('#data tr:last').remove();
 	 }],
@@ -50,6 +39,10 @@
 	     $('#data').append(a)
 	     $('#data').append(b)
 	 }],
+	 ['DUP', () => {}],
+	 ['OVER', () => {}],
+	 ['ROT', () => {}],
+	 ['NROT', () => {}],
      ]
      
      $('#words').append(words.map(tup => {
