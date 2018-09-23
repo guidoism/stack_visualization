@@ -1,0 +1,63 @@
+<style type="text/css" media="screen">
+ @font-face{font-family:a;src:url(Apl385.woff)format('woff');}
+ body,textarea,input{font-family:a,monospace;}
+ table {font-size: 12px}
+ a{color:#008;text-decoration:none}
+ a:hover{text-decoration:underline}
+ table { border-collapse: collapse }
+ td { vertical-align: top; align: right }
+ td { border: 1px solid black; width: 10em; }
+ .hidden { border: none }
+</style>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+
+<table>
+    <tr><td id="program" colspan="3"></td></tr>
+    <tr>
+	<td class="hidden"><table id="return"></table></td>
+	<td class="hidden"><table id="data"></table></td>
+	<td class="hidden"><table id="words"></table></td>
+    </tr>
+</table>
+
+<script>
+ $(document).ready(function() {
+     $('#program').append('PICK SWAP 1 2 DUP OVER');
+
+     $('#return').append('<tr><td>0x01</td></tr>');
+     
+     $('#data').append('<tr><td>32</td></tr>');
+     $('#data').append('<tr><td>66</td></tr>');
+
+     let words = [
+	 'DROP',
+	 'SWAP',
+	 'DUP',
+	 'OVER',
+	 'ROT',
+	 'NROT',
+     ]
+
+     $('#words').append(words.map(w => `<tr><td class="hidden"><button>${w}</button></td></tr>`));
+
+     words = [
+	 ['DROP', () => {
+	     $('#data tr:last').remove();
+	 }],
+	 ['SWAP', () => {
+	     let a = $('#data tr:last').remove();
+	     let b = $('#data tr:last').remove();
+	     $('#data').append(a)
+	     $('#data').append(b)
+	 }],
+     ]
+     
+     $('#words').append(words.map(tup => {
+	 [w, f] = tup
+	 $('#words').append($(`<tr><td class="hidden"><button>${w}</button></td></tr>`).click(f))
+     }));
+
+     
+ })
+</script>
