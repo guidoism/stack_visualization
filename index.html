@@ -26,9 +26,8 @@
      $('#program').append('PICK SWAP 1 2 DUP OVER');
 
      $('#return').append('<tr><td>0x01</td></tr>');
-     
-     $('#data').append('<tr><td>32</td></tr>');
-     $('#data').append('<tr><td>66</td></tr>');
+
+     [...Array(9).keys()].map(s => $('#data').append(`<tr><td>${s}</td></tr>`))
 
      let words = [
 	 'DROP',
