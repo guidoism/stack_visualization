@@ -42,7 +42,9 @@
 	 ['DUP', () => {
 	     $('#data').append($('#data tr:last').clone())
 	 }],
-	 ['OVER', () => {}],
+	 ['OVER', () => {
+	     $('#data').append($('#data tr:nth-last-child(2)').clone())
+	 }],
 	 ['ROT', () => {}],
 	 ['NROT', () => {}],
      ]
