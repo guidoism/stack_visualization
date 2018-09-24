@@ -25,6 +25,7 @@
 <script>
  $(document).ready(function() {
      var data = [0, 1, 2, 5, 7, 9]
+     var program = []
      function* pop(n) { for (n; n>0; n--) yield data.pop() }
      const push = list => { data = data.concat(list) }
      
@@ -40,7 +41,7 @@
      let words = [
 	 ['DROP', () => {
 	     data.pop()
-	     update()
+	     update(w)
 	 }],
 	 ['SWAP', () => {
 	     let [b, a] = pop(2)
@@ -81,6 +82,42 @@
 	 ['?DUP', () => {
 	     let a = data[data.length-1]
 	     if (a != 0) data.push(a)
+	     update()
+	 }],
+	 ['1+', () => {
+	     push([data.pop()+1])
+	     update()
+	 }],
+	 ['1-', () => {
+	     push([data.pop()-1])
+	     update()
+	 }],
+	 ['4+', () => {
+	     push([data.pop()+4])
+	     update()
+	 }],
+	 ['4-', () => {
+	     push([data.pop()-4])
+	     update()
+	 }],
+	 ['+', () => {
+	     let [b, a] = pop(2)
+	     push([b+a])
+	     update()
+	 }],
+	 ['-', () => {
+	     let [b, a] = pop(2)
+	     push([a-b])
+	     update()
+	 }],
+	 ['*', () => {
+	     let [b, a] = pop(2)
+	     push([a*b])
+	     update()
+	 }],
+	 ['/MOD', () => {
+	     let [a, b] = pop(2)
+	     push([b % a, Math.trunc(b/a)])
 	     update()
 	 }],
      ]
