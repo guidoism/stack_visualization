@@ -39,93 +39,81 @@
      $('#return').append('<tr><td>0x01</td></tr>');
 
      let words = [
-	 ['DROP', () => {
+ 	 ['DROP', () => {
 	     data.pop()
-	     update(w)
 	 }],
 	 ['SWAP', () => {
 	     let [b, a] = pop(2)
 	     push([b, a])
-	     update()
 	 }],
 	 ['DUP', () => {
 	     data.push(data[data.length-1])
-	     update()
 	 }],
 	 ['OVER', () => {
 	     data.push(data[data.length-2])
-	     update()
 	 }],
 	 ['ROT', () => {
 	     let [c, b, a] = pop(3)
 	     push([b, c, a])
-	     update()
 	 }],
 	 ['-ROT', () => {
 	     let [c, b, a] = pop(3)
 	     push([c, a, b])
-	     update()
 	 }],
 	 ['2DROP', () => {
 	     let [b, a] = pop(2)
-	     update()
 	 }],
 	 ['2DUP', () => {
 	     push([data[data.length-2], data[data.length-1]])
-	     update()
 	 }],
 	 ['2SWAP', () => {
 	     let [d, c, b, a] = pop(4)
 	     push([c, d, a, b])
-	     update()
 	 }],
 	 ['?DUP', () => {
 	     let a = data[data.length-1]
 	     if (a != 0) data.push(a)
-	     update()
 	 }],
 	 ['1+', () => {
 	     push([data.pop()+1])
-	     update()
 	 }],
 	 ['1-', () => {
 	     push([data.pop()-1])
-	     update()
 	 }],
 	 ['4+', () => {
 	     push([data.pop()+4])
-	     update()
 	 }],
 	 ['4-', () => {
 	     push([data.pop()-4])
-	     update()
 	 }],
 	 ['+', () => {
 	     let [b, a] = pop(2)
 	     push([b+a])
-	     update()
 	 }],
 	 ['-', () => {
 	     let [b, a] = pop(2)
 	     push([a-b])
-	     update()
 	 }],
 	 ['*', () => {
 	     let [b, a] = pop(2)
 	     push([a*b])
-	     update()
 	 }],
 	 ['/MOD', () => {
 	     let [a, b] = pop(2)
 	     push([b % a, Math.trunc(b/a)])
-	     update()
 	 }],
      ]
-     
-     $('#words').append(words.map(tup => {
-	 [w, f] = tup
-	 $('#words').append($(`<tr><td class="hidden"><button>${w}</button></td></tr>`).click(f))
-     }));
+
+     words.map(tuple => {
+	 let [w, f] = tuple
+	 console.log(w)
+	 $('#words').append($(`<tr><td class="hidden"><button>${w}</button></td></tr>`).click(() => {
+	     f()
+	     update(w)
+	     program.push(w)
+	     console.log(program)
+	 }))
+     })
 
      update()
  })
