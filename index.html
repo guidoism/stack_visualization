@@ -33,9 +33,12 @@
 	 var t = d3.select("#data").selectAll("td").data(data).text(function(d) { return d; });
 	 t.enter().append("tr").append("td").text(function(d) { return d; });
 	 t.exit().remove();
+
+     	 t = d3.select("#program").selectAll("td").data(program).text(function(d) { return d; });
+	 t.enter().append("td").text(function(d) { return d; });
+	 t.exit().remove();
      }
      
-     $('#program').append('PICK SWAP 1 2 DUP OVER');
      $('#return').append('<tr><td>0x01</td></tr>');
 
      let words = [
@@ -106,12 +109,10 @@
 
      words.map(tuple => {
 	 let [w, f] = tuple
-	 console.log(w)
 	 $('#words').append($(`<tr><td class="hidden"><button>${w}</button></td></tr>`).click(() => {
 	     f()
-	     update(w)
 	     program.push(w)
-	     console.log(program)
+	     update()
 	 }))
      })
 
