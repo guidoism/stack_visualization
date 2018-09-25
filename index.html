@@ -26,13 +26,14 @@
 <script>
  $(document).ready(function() {
      var data = [0n, 1n, 2n, 5n, 7n, 9n]
+     data = data.map(n => BigInt.asIntN(64, n))
      var program = []
      const pop = n => { a = []; for (n; n>0; n--) a.unshift(data.pop()); return a }
      const push = list => { data = data.concat(list) }
      
      function update() {
-	 var t = d3.select("#data").selectAll("td").data(data).text(function(d) { return d; });
-	 t.enter().append("tr").append("td").text(function(d) { return d; });
+	 var t = d3.select("#data").selectAll("td").data(data).text(function(d) { return d.toString(2); });
+	 t.enter().append("tr").append("td").text(function(d) { return d.toString(2); });
 	 t.exit().remove();
 
      	 t = d3.select("#program").selectAll("td").data(program).text(function(d) { return d; });
@@ -77,6 +78,7 @@
  	 ['OR',     (a, b)        => a | b],
  	 ['XOR',    (a, b)        => a ^ b],
  	 ['INVERT', (a)           => ~a ],
+	 ['STORE',  ()            => {} ],
      ]
      
      words.map(tuple => {
