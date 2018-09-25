@@ -27,7 +27,7 @@
  $(document).ready(function() {
      var data = [0n, 1n, 2n, 5n, 7n, 9n]
      var program = []
-     function* pop(n) { for (n; n>0; n--) yield data.pop() }
+     const pop = n => { a = []; for (n; n>0; n--) a.unshift(data.pop()); return a }
      const push = list => { data = data.concat(list) }
      
      function update() {
@@ -43,75 +43,37 @@
      $('#return').append('<tr><td>0x01</td></tr>');
 
      let words = [
- 	 ['DROP', () => {
-	     data.pop()
-	 }],
-	 ['SWAP', () => {
-	     let [b, a] = pop(2)
-	     push([b, a])
-	 }],
-	 ['DUP', () => {
-	     data.push(data[data.length-1])
-	 }],
-	 ['OVER', () => {
-	     data.push(data[data.length-2])
-	 }],
-	 ['ROT', () => {
-	     let [c, b, a] = pop(3)
-	     push([b, c, a])
-	 }],
-	 ['-ROT', () => {
-	     let [c, b, a] = pop(3)
-	     push([c, a, b])
-	 }],
-	 ['2DROP', () => {
-	     let [b, a] = pop(2)
-	 }],
-	 ['2DUP', () => {
-	     push([data[data.length-2], data[data.length-1]])
-	 }],
-	 ['2SWAP', () => {
-	     let [d, c, b, a] = pop(4)
-	     push([c, d, a, b])
-	 }],
-	 ['?DUP', () => {
-	     let a = data[data.length-1]
-	     if (a != 0) data.push(a)
-	 }],
-	 ['1+', () => {
-	     push([data.pop()+1n])
-	 }],
-	 ['1-', () => {
-	     push([data.pop()-1n])
-	 }],
-	 ['4+', () => {
-	     push([data.pop()+4n])
-	 }],
-	 ['4-', () => {
-	     push([data.pop()-4n])
-	 }],
-	 ['+', () => {
-	     let [b, a] = pop(2)
-	     push([b+a])
-	 }],
-	 ['-', () => {
-	     let [b, a] = pop(2)
-	     push([a-b])
-	 }],
-	 ['*', () => {
-	     let [b, a] = pop(2)
-	     push([a*b])
-	 }],
-	 ['/MOD', () => {
-	     let [a, b] = pop(2)
-	     push([b % a, Math.trunc(b/a)])
-	 }],
+	 ['DROP',  (a)           => [] ],
+	 ['SWAP',  (a, b)        => [b, a] ],
+	 ['DUP',   (a)           => [a, a] ],
+	 ['OVER',  (a, b)        => [a, b, a] ],
+	 ['ROT',   (a, b, c)     => [b, c, a] ],
+	 ['-ROT',  (a, b, c)     => [c, a, b] ],
+	 ['2DROP', (a, b)        => [] ],
+	 ['2DUP',  (a, b)        => [a, b, a, b] ],
+	 ['2SWAP', (a, b, c, d)  => [c, d, a, b] ],
+	 ['?DUP',  (a)           => (a == 0) ? a : [a,a] ],
+	 ['1+',    (a)           => a+1n ],
+	 ['1-',    (a)           => a-1n ],
+	 ['4+',    (a)           => a+4n ],
+	 ['4-',    (a)           => a-4n ],
+	 ['+',     (a, b)        => a+b  ],
+	 ['-',     (a, b)        => a-b  ],
+	 ['*',     (a, b)        => a*b  ],
+	 ['/MOD',  (a, b)        => [b%a, b/a] ],
+ 	 ['=',     (a, b)        => a == b],
      ]
 
+     
+     
      words.map(tuple => {
 	 let [w, f] = tuple
 	 $('#words').append($(`<tr><td class="hidden"><button>${w}</button></td></tr>`).click(() => {
-	     f()
+	     if (f.length == 2) { let [a, b] = pop(2); push(f(a, b)) }
+	     else if (f.length == 4) { let [a, b, c, d] = pop(4); push(f(a, b, c, d)) }
+	     else if (f.length == 3) { let [a, b, c, d] = pop(3); push(f(a, b, c)) }
+	     else if (f.length == 1) { let [a] = pop(1); push(f(a)) }
+	     else f()
 	     program.push(w)
 	     update()
 	 }))
