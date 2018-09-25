@@ -20,11 +20,12 @@
 	<td class="hidden"><table id="words"></table></td>
     </tr>
     <tr><td id="program" colspan="3"></td></tr>
+    <tr><tdcolspan="3"><input id="literal" type="text"><button id="lit">LIT</button></td></tr>
 </table>
 
 <script>
  $(document).ready(function() {
-     var data = [0, 1, 2, 5, 7, 9]
+     var data = [0n, 1n, 2n, 5n, 7n, 9n]
      var program = []
      function* pop(n) { for (n; n>0; n--) yield data.pop() }
      const push = list => { data = data.concat(list) }
@@ -78,16 +79,16 @@
 	     if (a != 0) data.push(a)
 	 }],
 	 ['1+', () => {
-	     push([data.pop()+1])
+	     push([data.pop()+1n])
 	 }],
 	 ['1-', () => {
-	     push([data.pop()-1])
+	     push([data.pop()-1n])
 	 }],
 	 ['4+', () => {
-	     push([data.pop()+4])
+	     push([data.pop()+4n])
 	 }],
 	 ['4-', () => {
-	     push([data.pop()-4])
+	     push([data.pop()-4n])
 	 }],
 	 ['+', () => {
 	     let [b, a] = pop(2)
@@ -115,6 +116,14 @@
 	     update()
 	 }))
      })
+
+     $('#lit').click(() => {
+	 let n = BigInt($('#literal').val())
+	 push([n])
+	 program.push('LIT')
+	 program.push(n)
+	 update()
+     });
 
      update()
  })
