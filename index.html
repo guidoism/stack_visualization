@@ -17,17 +17,21 @@
     <tr>
 	<td class="hidden"><table id="return"></table></td>
 	<td class="hidden"><table id="data"></table></td>
+	<td class="hidden"><table id="memory"></table></td>
 	<td class="hidden"><table id="words"></table></td>
     </tr>
-    <tr><td id="program" colspan="3"></td></tr>
+    <tr><td id="program" colspan="4"></td></tr>
     <tr><tdcolspan="3"><input id="literal" type="text"><button id="lit">LIT</button></td></tr>
 </table>
 
 <script>
  $(document).ready(function() {
      var data = [0n, 1n, 2n, 5n, 7n, 9n]
-     data = data.map(n => BigInt.asIntN(64, n))
+     data = data.map(n => BigInt.asIntN(32, n))
      var program = []
+     var buffer = new ArrayBuffer(32*4)
+     var memory = new Int32Array(buffer)
+     
      const pop = n => { a = []; for (n; n>0; n--) a.unshift(data.pop()); return a }
      const push = list => { data = data.concat(list) }
      
@@ -38,6 +42,10 @@
 
      	 t = d3.select("#program").selectAll("td").data(program).text(function(d) { return d; });
 	 t.enter().append("td").text(function(d) { return d; });
+	 t.exit().remove();
+
+     	 t = d3.select("#memory").selectAll("td").data(memory).text(function(d) { return d.toString(2); });
+	 t.enter().append("tr").append("td").text(function(d) { return d.toString(2); });
 	 t.exit().remove();
      }
      
@@ -78,7 +86,10 @@
  	 ['OR',     (a, b)        => a | b],
  	 ['XOR',    (a, b)        => a ^ b],
  	 ['INVERT', (a)           => ~a ],
-	 ['STORE',  ()            => {} ],
+	 ['!',      (a, b)        => memory[b] = Number(a) ],
+	 ['@',      (a)           => memory[a] ],
+	 ['!+',     (a, b)        => memory[b] = memory[b]+Number(a) ],
+	 ['!-',     (a, b)        => memory[b] = memory[b]-Number(a) ],
      ]
      
      words.map(tuple => {
